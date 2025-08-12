@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Login Marco Antonio</title>
+<style>
+  /* Reset básico */
+  * {
+    margin: 0; padding: 0; box-sizing: border-box;
+  }
+  html, body {
+    height: 100%;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    overflow: hidden;
+    background: #000;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  #fireCanvas {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+  }
+  .container {
+    background: rgba(0,0,0,0.75);
+    padding: 2rem 3rem;
+    border-radius: 12px;
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
+    backdrop-filter: blur(6px);
+    box-shadow: 0 0 15px 3px rgba(255, 140, 0, 0.7);
+  }
+  h1 {
+    font-weight: 700;
+    font-size: 2.2rem;
+    margin-bottom: 2rem;
+    color: #ff9a00;
+    text-shadow: 0 0 10px #ff7c00;
+  }
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+  }
+  label {
+    text-align: left;
+    font-weight: 600;
+    color: #ffb84d;
+    margin-bottom: 0.3rem;
+    user-select: none;
+  }
+  input[type="text"],
+  input[type="password"] {
+    padding: 0.8rem 1rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    outline: none;
+    transition: box-shadow 0.3s ease;
+  }
+  input[type="text"]:focus,
+  input[type="password"]:focus {
+    box-shadow: 0 0 8px 2px #ff7c00;
+    background: #1a1a1a;
+    color: #fff;
+  }
+  button {
+    padding: 0.9rem 1rem;
+    background: #ff7c00;
+    border: none;
+    border-radius: 8px;
+    color: #fff;
+    font-weight: 700;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  button:hover {
+    background: #ff9a00;
+  }
+  /* Responsive */
+  @media (max-width: 450px) {
+    .container {
+      padding: 1.5rem 2rem;
+    }
+    h1 {
+      font-size: 1.8rem;
+    }
+  }
+</style>
+</head>
+<body>
+
+<canvas id="fireCanvas"></canvas>
+
+<div class="container" role="main" aria-label="Formulario de inicio de sesión">
+  <h1>Iniciar Sesión</h1>
+  <form action="#" method="POST" autocomplete="off">
+    <label for="username">Usuario</label>
+    <input type="text" id="username" name="username" placeholder="Tu usuario" required autofocus />
+
+    <label for="password">Contraseña</label>
+    <input type="password" id="password" name="password" placeholder="Tu contraseña" required />
+
+    <button type="submit">Entrar</button>
+  </form>
+</div>
+
+<script>
+// Variables para el fuego
+const canvas = document.getElementById('fireCanvas');
+const ctx = canvas.getContext('2d');
+let width, height;
+
+function resize() {
+  width = canvas.width = window.innerWidth;
+  height = canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener('resize', resize);
+
+// Crear partículas simples para simular fuego
+class Particle {
+  constructor() {
+    this.reset();
+  }
+  reset() {
+    this.x = Math.random() * width;
+    this.y = height + Math.random() * 100;
+    this.size = 10 + Math.random() * 20;
+    this.speedY = 1 + Math.random() * 3;
+    this.speedX = (Math.random() - 0.5) * 1;
+    this.alpha = 0.8 + Math.random() * 0.2;
+    this.life = 60 + Math.random() * 40;
+    this.age = 0;
+    this.color = `hsl(${30 + Math.random() * 40}, 100%, 50%)`;
+  }
+  update() {
+    this.x += this.speedX;
+    this.y -= this.speedY;
+    this.age++;
+    this.alpha -= 0.012;
+    if (this.age >= this.life || this.alpha <= 0) {
+      this.reset();
+    }
+  }
+  draw() {
+    const gradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.size);
+    gradient.addColorStop(0, `rgba(255, 200, 0, ${this.alpha})`);
+    gradient.addColorStop(0.5, `rgba(255, 140, 0, ${this.alpha * 0.6})`);
+    gradient.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = gradient;
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+    ctx.fill();
+  }
+}
+
+const particlesCount = 80;
+const particles = [];
+
+for(let i = 0; i < particlesCount; i++) {
+  particles.push(new Particle());
+}
+
+function animate() {
+  ctx.clearRect(0, 0, width, height);
+  for(let p of particles) {
+    p.update();
+    p.draw();
+  }
+  requestAnimationFrame(animate);
+}
+
+animate();
+</script>
+
+</body>
+</html>
