@@ -1,0 +1,39 @@
+# Ignorar archivos del sistema operativo
+.DS_Store
+Thumbs.db
+
+# Archivos de logs
+*.log
+
+# Directorios de dependencias si usas Node.js
+node_modules/
+
+# Archivos de entorno (si usas .env)
+.env
+
+# Archivos generados por editores o IDEs comunes
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# Archivos de GitHub Actions (opcional)
+.github/workflows/*.yml
+
+# Carpeta de despliegue local (si usas alguna)
+dist/
+build/
+
+# Otros archivos temporales o de caché
+*.cache
+*.tmp
+*.temp
+
+# Archivos de backup
+*~
+*.bak
+
+# Archivos específicos del sistema
+ehthumbs.db

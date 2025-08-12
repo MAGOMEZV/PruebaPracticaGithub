@@ -17,4 +17,8 @@ jobs:
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GH_TOKEN }}
-          publish_dir: ./  # raíz del repo, donde está index.html
+          publish_branch: gh-pages           # rama donde se publica
+          publish_dir: ./                    # carpeta raíz con index.html
+          user_name: 'github-actions[bot]'  # opcional para commit author
+          user_email: 'github-actions[bot]@users.noreply.github.com'
+          keep_files: false                  # elimina archivos previos para evitar basura
